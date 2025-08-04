@@ -5,9 +5,9 @@ class Dashboard {
         this.currentUser = null;
         this.connectedAccounts = {
             instagram: false,
-            tiktok: false,
+            twitter: false,
             linkedin: false,
-            twitter: false
+            facebook: false
         };
         this.analysisData = null;
         
@@ -76,7 +76,10 @@ class Dashboard {
             const button = document.querySelector(`[data-platform="${platform}"]`);
             if (button) {
                 const statusSpan = button.querySelector('span:last-child');
-                if (this.connectedAccounts[platform]) {
+                const isConnected = this.connectedAccounts[platform] && 
+                    (this.connectedAccounts[platform] === true || this.connectedAccounts[platform].connected === true);
+                
+                if (isConnected) {
                     button.className = button.className.replace('border-dashed border-gray-300 dark:border-gray-600', 'border-solid border-green-500 bg-green-50 dark:bg-green-900/20');
                     if (statusSpan) statusSpan.textContent = 'Connected';
                     if (statusSpan) statusSpan.className = 'text-xs text-green-600 dark:text-green-400 mt-1';
@@ -91,7 +94,9 @@ class Dashboard {
         const startButton = document.getElementById('start-analysis-btn');
         if (!startButton) return;
         
-        const connectedCount = Object.values(this.connectedAccounts).filter(Boolean).length;
+        const connectedCount = Object.values(this.connectedAccounts).filter(account => {
+            return account === true || (account && account.connected === true);
+        }).length;
         
         if (connectedCount > 0) {
             startButton.disabled = false;
@@ -111,15 +116,6 @@ class Dashboard {
             });
         }
         
-        // Navigation menu
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                const section = item.getAttribute('data-section');
-                this.showSection(section);
-            });
-        });
-        
         // Logout functionality
         const logoutBtn = document.getElementById('logout-btn');
         if (logoutBtn) {
@@ -131,8 +127,13 @@ class Dashboard {
     }
     
     showSection(sectionName) {
+        // Ignore null or undefined section names
+        if (!sectionName) {
+            return;
+        }
+        
         // Hide all sections
-        document.querySelectorAll('.dashboard-section').forEach(section => {
+        document.querySelectorAll('.section').forEach(section => {
             section.classList.add('hidden');
         });
         
@@ -144,43 +145,156 @@ class Dashboard {
         
         // Update navigation
         document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.remove('bg-primary-100', 'text-primary-700', 'dark:bg-primary-900', 'dark:text-primary-300');
-            item.classList.add('text-gray-700', 'dark:text-gray-300');
+            item.classList.remove('active');
         });
         
-        const activeNav = document.querySelector(`[data-section="${sectionName}"]`);
+        const activeNav = document.querySelector(`[onclick="showSection('${sectionName}')"]`);
         if (activeNav) {
-            activeNav.classList.add('bg-primary-100', 'text-primary-700', 'dark:bg-primary-900', 'dark:text-primary-300');
-            activeNav.classList.remove('text-gray-700', 'dark:text-gray-300');
+            activeNav.classList.add('active');
+        }
+        
+        // Load section-specific data
+        if (sectionName === 'results') {
+            console.log('Loading results data...');
+            this.loadMyResults();
+            this.loadResultsHistory();
         }
     }
     
     connectAccount(platform) {
-        // Simulate account connection
-        showMessage(`Connecting to ${platform.charAt(0).toUpperCase() + platform.slice(1)}...`, 'info');
+        // Check if already connected
+        const isConnected = this.connectedAccounts[platform] && 
+            (this.connectedAccounts[platform] === true || this.connectedAccounts[platform].connected === true);
         
+        if (isConnected) {
+            showMessage(`${platform.charAt(0).toUpperCase() + platform.slice(1)} is already connected!`, 'info');
+            return;
+        }
+        
+        // Show connection modal
+        this.showConnectionModal(platform);
+    }
+    
+    showConnectionModal(platform) {
+        const modal = document.getElementById('connection-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalIcon = document.getElementById('modal-platform-icon');
+        const usernameInput = document.getElementById('username-input');
+        const connectionForm = document.getElementById('connection-form');
+        
+        if (!modal || !modalTitle || !modalIcon || !usernameInput || !connectionForm) {
+            console.error('Modal elements not found');
+            return;
+        }
+        
+        // Set platform-specific content
+        const platformConfig = {
+            instagram: { icon: 'fab fa-instagram', color: 'text-pink-500', name: 'Instagram' },
+            twitter: { icon: 'fab fa-x-twitter', color: 'text-black dark:text-white', name: 'X (Twitter)' },
+            linkedin: { icon: 'fab fa-linkedin', color: 'text-blue-600', name: 'LinkedIn' },
+            facebook: { icon: 'fab fa-facebook', color: 'text-blue-600', name: 'Facebook' }
+        };
+        
+        const config = platformConfig[platform];
+        if (config) {
+            modalTitle.textContent = `Connect to ${config.name}`;
+            modalIcon.className = `${config.icon} text-3xl ${config.color}`;
+            usernameInput.placeholder = `Enter your ${config.name} username`;
+        }
+        
+        // Clear previous input
+        usernameInput.value = '';
+        
+        // Store current platform for form submission
+        this.currentConnectionPlatform = platform;
+        
+        // Show modal
+        modal.classList.remove('hidden');
+        usernameInput.focus();
+        
+        // Handle form submission
+        connectionForm.onsubmit = (e) => {
+            e.preventDefault();
+            this.handleConnectionSubmit();
+        };
+    }
+    
+    handleConnectionSubmit() {
+        const usernameInput = document.getElementById('username-input');
+        const saveBtn = document.getElementById('save-connection-btn');
+        const saveBtnText = document.getElementById('save-btn-text');
+        const saveBtnLoading = document.getElementById('save-btn-loading');
+        
+        if (!usernameInput || !this.currentConnectionPlatform) {
+            showMessage('Error: Missing required information', 'error');
+            return;
+        }
+        
+        const username = usernameInput.value.trim();
+        if (!username) {
+            showMessage('Please enter a username', 'error');
+            usernameInput.focus();
+            return;
+        }
+        
+        // Show loading state
+        saveBtn.disabled = true;
+        saveBtnText.classList.add('hidden');
+        saveBtnLoading.classList.remove('hidden');
+        
+        // Simulate connection process
         setTimeout(() => {
-            this.connectedAccounts[platform] = true;
-            
-            // Update user data
-            authManager.updateUser({
-                connectedAccounts: this.connectedAccounts
-            });
-            
-            // Update UI
-            const button = document.querySelector(`[data-platform="${platform}"]`);
-            if (button) {
-                button.className = button.className.replace('border-dashed border-gray-300 dark:border-gray-600', 'border-solid border-green-500 bg-green-50 dark:bg-green-900/20');
-                const statusSpan = button.querySelector('span:last-child');
-                if (statusSpan) {
-                    statusSpan.textContent = 'Connected';
-                    statusSpan.className = 'text-xs text-green-600 dark:text-green-400 mt-1';
-                }
+            this.completeConnection(this.currentConnectionPlatform, username);
+        }, 2000);
+    }
+    
+    completeConnection(platform, username) {
+        // Update connected accounts
+        this.connectedAccounts[platform] = { connected: true, username: username };
+        
+        // Update user data in storage
+        authManager.updateUser({
+            connectedAccounts: this.connectedAccounts
+        });
+        
+        // Update UI
+        const button = document.querySelector(`[data-platform="${platform}"]`);
+        if (button) {
+            button.className = button.className.replace('border-dashed border-gray-300 dark:border-gray-600', 'border-solid border-green-500 bg-green-50 dark:bg-green-900/20');
+            const statusSpan = button.querySelector('span:last-child');
+            if (statusSpan) {
+                statusSpan.textContent = 'Connected';
+                statusSpan.className = 'text-xs text-green-600 dark:text-green-400 mt-1';
             }
-            
-            this.updateStartAnalysisButton();
-            showMessage(`${platform.charAt(0).toUpperCase() + platform.slice(1)} connected successfully!`, 'success');
-        }, 1500);
+        }
+        
+        // Update start analysis button
+        this.updateStartAnalysisButton();
+        
+        // Close modal and show success message
+        this.closeConnectionModal();
+        showMessage(`${platform.charAt(0).toUpperCase() + platform.slice(1)} connected successfully!`, 'success');
+    }
+    
+    closeConnectionModal() {
+        const modal = document.getElementById('connection-modal');
+        const saveBtn = document.getElementById('save-connection-btn');
+        const saveBtnText = document.getElementById('save-btn-text');
+        const saveBtnLoading = document.getElementById('save-btn-loading');
+        
+        if (modal) {
+            modal.classList.add('hidden');
+        }
+        
+        // Reset button state
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtnText.classList.remove('hidden');
+            saveBtnLoading.classList.add('hidden');
+        }
+        
+        // Clear current platform
+        this.currentConnectionPlatform = null;
     }
     
     startAnalysis() {
@@ -215,9 +329,9 @@ class Dashboard {
         const messages = [
             "Connecting to platforms...",
             "Analyzing Instagram posts...",
-            "Scanning TikTok content...",
+            "Scanning X (Twitter) content...",
             "Reviewing LinkedIn profile...",
-            "Examining Twitter activity...",
+            "Examining Facebook activity...",
             "Processing image content...",
             "Analyzing language patterns...",
             "Checking location data...",
@@ -261,6 +375,9 @@ class Dashboard {
         // Generate mock analysis data
         this.generateAnalysisData();
         
+        // Save analysis data to user profile
+        this.saveAnalysisData();
+        
         // Show results section
         const resultsSection = document.getElementById('analysis-results');
         if (resultsSection) {
@@ -278,6 +395,27 @@ class Dashboard {
         resultsSection.scrollIntoView({ behavior: 'smooth' });
         
         showMessage('Analysis complete! Review your results below.', 'success');
+    }
+    
+    saveAnalysisData() {
+        if (!this.analysisData) return;
+        
+        // Save analysis data to user profile with payment status
+        authManager.updateUser({
+            lastAnalysis: {
+                data: this.analysisData,
+                date: new Date().toISOString(),
+                isPaidResult: this.currentUser.isPaid, // Save whether this was a paid or free result
+                displayType: this.currentUser.isPaid ? 'full' : 'free', // Save display type
+                platforms: Object.keys(this.connectedAccounts).filter(platform => {
+                    const account = this.connectedAccounts[platform];
+                    return account === true || (account && account.connected === true);
+                })
+            }
+        });
+        
+        // Update current user reference
+        this.currentUser = authManager.getCurrentUser();
     }
     
     generateAnalysisData() {
@@ -303,20 +441,24 @@ class Dashboard {
             flaggedContent: [
                 {
                     platform: 'Instagram',
-                    content: 'Post about political rally attendance',
-                    risk: 'Medium',
+                    content: 'Beautiful sunset at Stanford campus! 🌅',
+                    hashtags: '#Stanford #StudentLife',
+                    description: 'Positive educational content',
+                    risk: 'Low',
                     date: '2024-12-15'
                 },
                 {
-                    platform: 'Twitter',
-                    content: 'Tweet with strong political opinion',
-                    risk: 'High',
+                    platform: 'TikTok',
+                    content: 'Party with friends last weekend! 🎉',
+                    description: 'Social content - review for context',
+                    risk: 'Moderate',
                     date: '2024-12-10'
                 },
                 {
-                    platform: 'LinkedIn',
-                    content: 'Comment on controversial topic',
-                    risk: 'Low',
+                    platform: 'Twitter',
+                    content: 'Strong political views on immigration policy',
+                    description: 'Political content - potentially concerning for visa application',
+                    risk: 'High',
                     date: '2024-12-08'
                 }
             ]
@@ -327,18 +469,33 @@ class Dashboard {
         const freeResults = document.getElementById('free-trial-results');
         const fullResults = document.getElementById('full-results');
         
+        // Show free trial results and hide full results for free users
         if (freeResults) freeResults.classList.remove('hidden');
         if (fullResults) fullResults.classList.add('hidden');
+        
+        // Hide recommendations section in free trial results for free users
+        const analysisRecommendations = document.getElementById('analysis-recommendations-section');
+        if (analysisRecommendations) {
+            analysisRecommendations.classList.add('hidden');
+        }
+        
+        // Show message for free users
+        showMessage('Free analysis complete! Upgrade to unlock detailed recommendations and flagged content.', 'info');
     }
     
     showFullResults() {
         const freeResults = document.getElementById('free-trial-results');
         const fullResults = document.getElementById('full-results');
         
+        // Hide free trial results and show full results for paid users
         if (freeResults) freeResults.classList.add('hidden');
         if (fullResults) fullResults.classList.remove('hidden');
         
+        // Populate the full results with data
         this.populateFullResults();
+        
+        // Show message for paid users
+        showMessage('Complete analysis ready! Review your detailed results and recommendations below.', 'success');
     }
     
     populateFullResults() {
@@ -451,21 +608,50 @@ class Dashboard {
         container.innerHTML = '';
         
         this.analysisData.flaggedContent.forEach(item => {
-            const riskColor = item.risk === 'Low' ? 'green' : item.risk === 'Medium' ? 'yellow' : 'red';
+            let riskColor, riskBg, riskBorder, riskText, riskLabel;
+            
+            if (item.risk === 'Low') {
+                riskColor = 'green';
+                riskBg = 'bg-green-50 dark:bg-green-900/20';
+                riskBorder = 'border-green-200 dark:border-green-700';
+                riskText = 'text-green-700 dark:text-green-300';
+                riskLabel = 'Low Risk';
+            } else if (item.risk === 'Moderate') {
+                riskColor = 'yellow';
+                riskBg = 'bg-yellow-50 dark:bg-yellow-900/20';
+                riskBorder = 'border-yellow-200 dark:border-yellow-700';
+                riskText = 'text-yellow-700 dark:text-yellow-300';
+                riskLabel = 'Moderate Risk';
+            } else {
+                riskColor = 'red';
+                riskBg = 'bg-red-50 dark:bg-red-900/20';
+                riskBorder = 'border-red-200 dark:border-red-700';
+                riskText = 'text-red-700 dark:text-red-300';
+                riskLabel = 'High Risk';
+            }
+            
             const iconClass = this.getPlatformIcon(item.platform.toLowerCase());
+            const platformColor = this.getPlatformColor(item.platform.toLowerCase());
             
             const div = document.createElement('div');
-            div.className = 'p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600';
+            div.className = `p-4 ${riskBg} rounded-lg border ${riskBorder}`;
             div.innerHTML = `
-                <div class="flex items-start justify-between">
-                    <div class="flex items-start space-x-3">
-                        <i class="${iconClass}"></i>
-                        <div>
-                            <p class="text-sm font-medium text-gray-900 dark:text-white">${item.content}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${item.date}</p>
-                        </div>
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex items-center space-x-2">
+                        <i class="${iconClass} ${platformColor}"></i>
+                        <span class="text-sm font-medium text-gray-900 dark:text-white">${item.platform}</span>
                     </div>
-                    <span class="px-2 py-1 bg-${riskColor}-100 dark:bg-${riskColor}-900/20 text-${riskColor}-700 dark:text-${riskColor}-300 text-xs font-medium rounded">${item.risk} Risk</span>
+                    <span class="px-2 py-1 ${riskBg} ${riskText} text-xs font-medium rounded border ${riskBorder}">${riskLabel}</span>
+                </div>
+                <div class="mb-2">
+                    <h4 class="font-medium text-gray-900 dark:text-white mb-1">${item.content}</h4>
+                    ${item.hashtags ? `<p class="text-sm text-gray-600 dark:text-gray-400">${item.hashtags}</p>` : ''}
+                </div>
+                <p class="text-sm ${riskText} italic">${item.description}</p>
+                <div class="mt-3 flex justify-end">
+                    <button class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded transition-colors">
+                        View Details
+                    </button>
                 </div>
             `;
             
@@ -475,52 +661,369 @@ class Dashboard {
     
     getPlatformIcon(platform) {
         const icons = {
-            instagram: 'fab fa-instagram text-pink-500',
-            tiktok: 'fab fa-tiktok text-black dark:text-white',
-            linkedin: 'fab fa-linkedin text-blue-600',
-            twitter: 'fab fa-twitter text-blue-400'
+            instagram: 'fab fa-instagram',
+            twitter: 'fab fa-x-twitter',
+            linkedin: 'fab fa-linkedin',
+            facebook: 'fab fa-facebook',
+            tiktok: 'fab fa-tiktok'
         };
-        
-        return icons[platform] || 'fas fa-globe text-gray-500';
+        return icons[platform] || 'fas fa-globe';
     }
     
-    showSection(sectionName) {
-        // Hide all sections
-        document.querySelectorAll('.section').forEach(section => {
-            section.classList.add('hidden');
+    getPlatformColor(platform) {
+        const colors = {
+            instagram: 'text-pink-500',
+            twitter: 'text-black dark:text-white',
+            linkedin: 'text-blue-600',
+            facebook: 'text-blue-600',
+            tiktok: 'text-black dark:text-white'
+        };
+        return colors[platform] || 'text-gray-500';
+    }
+    
+    loadMyResults() {
+        const noResultsMessage = document.getElementById('no-results-message');
+        const resultsDisplay = document.getElementById('results-display');
+        
+        // Load saved analysis data from user profile
+        if (this.currentUser.lastAnalysis && this.currentUser.lastAnalysis.data) {
+            this.analysisData = this.currentUser.lastAnalysis.data;
+        }
+        
+        if (!this.analysisData) {
+            // No analysis data available
+            if (noResultsMessage) noResultsMessage.classList.remove('hidden');
+            if (resultsDisplay) resultsDisplay.classList.add('hidden');
+            return;
+        }
+        
+        // Check if user paid for the original analysis
+        const wasOriginallyPaid = this.currentUser.lastAnalysis.isPaidResult || false;
+        const originalDisplayType = this.currentUser.lastAnalysis.displayType || 'free';
+        
+        // Show results display
+        if (noResultsMessage) noResultsMessage.classList.add('hidden');
+        if (resultsDisplay) {
+            resultsDisplay.classList.remove('hidden');
+        }
+        
+        // Show the same type of results that were originally generated
+        if (wasOriginallyPaid || originalDisplayType === 'full') {
+            this.showMyResultsFull();
+        } else {
+            this.showMyResultsFree();
+        }
+        
+        // Update analysis date
+        const analysisDate = document.getElementById('analysis-date');
+        if (analysisDate) {
+            let dateText = 'Today';
+            if (this.currentUser.lastAnalysis && this.currentUser.lastAnalysis.date) {
+                const savedDate = new Date(this.currentUser.lastAnalysis.date);
+                const today = new Date();
+                const diffTime = Math.abs(today - savedDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === 1) {
+                    dateText = 'Yesterday';
+                } else if (diffDays > 1) {
+                    dateText = savedDate.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                }
+            }
+            analysisDate.textContent = `Analyzed ${dateText}`;
+        }
+        
+        // Update overall metrics
+        this.updateResultsMetrics();
+        
+        // Update platform results
+        this.updatePlatformResults();
+        
+        // Update flagged content results
+        this.updateFlaggedContentResults();
+        
+        // Update recommendations
+        this.updateRecommendations();
+    }
+    
+    showMyResultsFull() {
+        // Show full results in My Results section (same as what paid users saw during analysis)
+        this.updateResultsMetrics();
+        this.updatePlatformResults();
+        this.updateFlaggedContentResults();
+        this.updateRecommendations();
+        
+        // Show all result cards
+        const resultCards = document.querySelectorAll('#results-display .bg-white, #results-display .bg-gray-50');
+        resultCards.forEach(card => {
+            card.classList.remove('hidden');
         });
         
-        // Show selected section
-        const targetSection = document.getElementById(`${sectionName}-section`);
-        if (targetSection) {
-            targetSection.classList.remove('hidden');
-        }
-        
-        // Update navigation
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.remove('active');
+        // Hide any upgrade prompts
+        const upgradePrompts = document.querySelectorAll('.upgrade-prompt');
+        upgradePrompts.forEach(prompt => {
+            prompt.classList.add('hidden');
         });
+    }
+    
+    showMyResultsFree() {
+        // Show limited results in My Results section (same as what free users saw during analysis)
+        this.updateResultsMetrics();
         
-        const activeNav = document.querySelector(`[onclick="showSection('${sectionName}')"]`);
-        if (activeNav) {
-            activeNav.classList.add('active');
+        // Show only basic metrics, hide detailed analysis
+        const platformCard = document.querySelector('#platform-analysis-card');
+        const flaggedCard = document.querySelector('#flagged-content-card');
+        const recommendationsCard = document.querySelector('#recommendations-card');
+        
+        if (platformCard) platformCard.classList.add('hidden');
+        if (flaggedCard) flaggedCard.classList.add('hidden');
+        if (recommendationsCard) recommendationsCard.classList.add('hidden');
+        
+        // Show upgrade prompt for detailed analysis
+        this.showMyResultsUpgradePrompt();
+    }
+    
+    showMyResultsUpgradePrompt() {
+        // Add upgrade prompt in My Results for free users
+        const resultsDisplay = document.getElementById('results-display');
+        if (!resultsDisplay) return;
+        
+        // Check if upgrade prompt already exists
+        let upgradePrompt = document.querySelector('.my-results-upgrade-prompt');
+        if (!upgradePrompt) {
+            upgradePrompt = document.createElement('div');
+            upgradePrompt.className = 'my-results-upgrade-prompt bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-700';
+            upgradePrompt.innerHTML = `
+                <div class="text-center">
+                    <div class="text-blue-600 dark:text-blue-400 mb-4">
+                        <i class="fas fa-lock text-3xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Unlock Detailed Analysis</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Get comprehensive platform analysis, flagged content review, and personalized recommendations.</p>
+                    <button onclick="showSection('settings')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-crown mr-2"></i>Upgrade Now
+                    </button>
+                </div>
+            `;
+            resultsDisplay.appendChild(upgradePrompt);
         }
         
-        // Update section title
-        const sectionTitle = document.getElementById('section-title');
-        if (sectionTitle) {
-            const titles = {
-                home: 'Dashboard',
-                results: 'My Results',
-                settings: 'Settings'
-            };
-            sectionTitle.textContent = titles[sectionName] || 'Dashboard';
+        upgradePrompt.classList.remove('hidden');
+    }
+    
+    updateResultsMetrics() {
+        if (!this.analysisData) return;
+        
+        const overallRiskDisplay = document.getElementById('overall-risk-display');
+        const approvalChanceDisplay = document.getElementById('approval-chance-display');
+        const postsAnalyzedDisplay = document.getElementById('posts-analyzed-display');
+        const flaggedItemsDisplay = document.getElementById('flagged-items-display');
+        
+        if (overallRiskDisplay) {
+            const riskLevel = this.analysisData.overallRisk < 30 ? 'Low' : 
+                             this.analysisData.overallRisk < 60 ? 'Medium' : 'High';
+            const riskColor = this.analysisData.overallRisk < 30 ? 'text-green-600' : 
+                             this.analysisData.overallRisk < 60 ? 'text-yellow-600' : 'text-red-600';
+            
+            overallRiskDisplay.textContent = riskLevel;
+            overallRiskDisplay.className = `text-3xl font-bold ${riskColor}`;
         }
         
-        // Load section-specific data
-        if (sectionName === 'results') {
-            this.loadResultsHistory();
+        if (approvalChanceDisplay) {
+            approvalChanceDisplay.textContent = `${this.analysisData.approvalChance}%`;
         }
+        
+        if (postsAnalyzedDisplay) {
+            postsAnalyzedDisplay.textContent = this.analysisData.postsAnalyzed.toLocaleString();
+        }
+        
+        if (flaggedItemsDisplay) {
+            flaggedItemsDisplay.textContent = this.analysisData.flaggedItems;
+        }
+    }
+    
+    updatePlatformResults() {
+        const container = document.getElementById('platform-results');
+        if (!container || !this.analysisData) return;
+        
+        container.innerHTML = '';
+        
+        this.analysisData.platforms.forEach(platform => {
+            const riskLevel = platform.risk < 30 ? 'Low' : platform.risk < 60 ? 'Medium' : 'High';
+            const riskColor = platform.risk < 30 ? 'green' : platform.risk < 60 ? 'yellow' : 'red';
+            const iconClass = this.getPlatformIcon(platform.name);
+            
+            const div = document.createElement('div');
+            div.className = 'flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg';
+            div.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <i class="${iconClass} text-xl"></i>
+                    <div>
+                        <p class="font-medium text-gray-900 dark:text-white">${platform.name.charAt(0).toUpperCase() + platform.name.slice(1)}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">${platform.posts} posts analyzed</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="w-24 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                        <div class="bg-${riskColor}-500 h-2 rounded-full" style="width: ${platform.risk}%"></div>
+                    </div>
+                    <span class="text-sm font-medium text-${riskColor}-600 min-w-[60px]">${riskLevel} (${platform.risk}%)</span>
+                </div>
+            `;
+            
+            container.appendChild(div);
+        });
+    }
+    
+    updateFlaggedContentResults() {
+        const container = document.getElementById('flagged-content-results');
+        if (!container || !this.analysisData) return;
+        
+        container.innerHTML = '';
+        
+        if (this.analysisData.flaggedContent.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-check text-2xl text-green-600"></i>
+                    </div>
+                    <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No Flagged Content</h4>
+                    <p class="text-gray-600 dark:text-gray-400">Great! No concerning content was found in your analysis.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        this.analysisData.flaggedContent.forEach(item => {
+        let riskColor, riskBg, riskBorder, riskText, riskLabel;
+        
+        if (item.risk === 'Low') {
+            riskColor = 'green';
+            riskBg = 'bg-green-50 dark:bg-green-900/20';
+            riskBorder = 'border-green-200 dark:border-green-700';
+            riskText = 'text-green-700 dark:text-green-300';
+            riskLabel = 'Low Risk';
+        } else if (item.risk === 'Moderate') {
+            riskColor = 'yellow';
+            riskBg = 'bg-yellow-50 dark:bg-yellow-900/20';
+            riskBorder = 'border-yellow-200 dark:border-yellow-700';
+            riskText = 'text-yellow-700 dark:text-yellow-300';
+            riskLabel = 'Moderate Risk';
+        } else {
+            riskColor = 'red';
+            riskBg = 'bg-red-50 dark:bg-red-900/20';
+            riskBorder = 'border-red-200 dark:border-red-700';
+            riskText = 'text-red-700 dark:text-red-300';
+            riskLabel = 'High Risk';
+        }
+        
+        const iconClass = this.getPlatformIcon(item.platform.toLowerCase());
+        const platformColor = this.getPlatformColor(item.platform.toLowerCase());
+        
+        const div = document.createElement('div');
+        div.className = `p-4 ${riskBg} rounded-lg border ${riskBorder}`;
+        div.innerHTML = `
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center space-x-2">
+                    <i class="${iconClass} ${platformColor}"></i>
+                    <span class="text-sm font-medium text-gray-900 dark:text-white">${item.platform}</span>
+                </div>
+                <span class="px-2 py-1 ${riskBg} ${riskText} text-xs font-medium rounded border ${riskBorder}">${riskLabel}</span>
+            </div>
+            <div class="mb-2">
+                <h4 class="font-medium text-gray-900 dark:text-white mb-1">${item.content}</h4>
+                ${item.hashtags ? `<p class="text-sm text-gray-600 dark:text-gray-400">${item.hashtags}</p>` : ''}
+            </div>
+            <p class="text-sm ${riskText} italic">${item.description}</p>
+            <div class="mt-3 flex justify-end">
+                <button class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded transition-colors">
+                    View Details
+                </button>
+            </div>
+        `;
+        
+        container.appendChild(div);
+    });
+    }
+    
+    updateRecommendations() {
+        const container = document.getElementById('recommendations-results');
+        if (!container || !this.analysisData) return;
+        
+        const recommendations = [
+            {
+                type: 'error',
+                icon: 'fas fa-exclamation-circle',
+                title: 'Remove political content',
+                description: 'Delete posts containing political opinions or activism references',
+                affects: '2 posts',
+                priority: 'high'
+            },
+            {
+                type: 'warning',
+                icon: 'fas fa-exclamation-triangle',
+                title: 'Add context to social posts',
+                description: 'Provide background information for party or social gathering posts',
+                affects: '3 posts',
+                priority: 'medium'
+            },
+            {
+                type: 'success',
+                icon: 'fas fa-check-circle',
+                title: 'Enhance educational content',
+                description: 'Continue sharing academic achievements and educational experiences',
+                affects: 'Keep showcasing academic progress',
+                priority: 'positive'
+            }
+        ];
+        
+        container.innerHTML = '';
+        
+        recommendations.forEach(rec => {
+            let colorClass, bgClass, borderClass, textClass, iconClass;
+            
+            if (rec.type === 'error') {
+                colorClass = 'red';
+                bgClass = 'bg-red-50 dark:bg-red-900/20';
+                borderClass = 'border-red-200 dark:border-red-700';
+                textClass = 'text-red-900 dark:text-red-100';
+                iconClass = 'text-red-600';
+            } else if (rec.type === 'warning') {
+                colorClass = 'yellow';
+                bgClass = 'bg-yellow-50 dark:bg-yellow-900/20';
+                borderClass = 'border-yellow-200 dark:border-yellow-700';
+                textClass = 'text-yellow-900 dark:text-yellow-100';
+                iconClass = 'text-yellow-600';
+            } else if (rec.type === 'success') {
+                colorClass = 'green';
+                bgClass = 'bg-green-50 dark:bg-green-900/20';
+                borderClass = 'border-green-200 dark:border-green-700';
+                textClass = 'text-green-900 dark:text-green-100';
+                iconClass = 'text-green-600';
+            }
+            
+            const div = document.createElement('div');
+            div.className = `p-4 ${bgClass} rounded-lg border ${borderClass}`;
+            div.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <i class="${rec.icon} ${iconClass} mt-1"></i>
+                    <div class="flex-1">
+                        <h4 class="font-medium ${textClass}">${rec.title}</h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">${rec.description}</p>
+                        <div class="flex items-center mt-2 text-xs text-gray-500 dark:text-gray-400">
+                            <i class="fas fa-file-alt mr-1"></i>
+                            <span>${rec.affects}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(div);
+        });
     }
     
     loadResultsHistory() {
@@ -673,6 +1176,12 @@ function deleteAccount() {
 function downloadReport() {
     if (window.dashboard) {
         window.dashboard.downloadReport();
+    }
+}
+
+function closeConnectionModal() {
+    if (window.dashboard) {
+        window.dashboard.closeConnectionModal();
     }
 }
 

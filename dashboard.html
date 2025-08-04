@@ -163,9 +163,9 @@
                                     <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Not Connected</span>
                                 </button>
                                 
-                                <button onclick="connectAccount('tiktok')" class="connect-btn flex flex-col items-center p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-black transition-colors" data-platform="tiktok">
-                                    <i class="fab fa-tiktok text-3xl text-black dark:text-white mb-2"></i>
-                                    <span class="text-sm font-medium text-gray-900 dark:text-white">TikTok</span>
+                                <button onclick="connectAccount('twitter')" class="connect-btn flex flex-col items-center p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-black transition-colors" data-platform="twitter">
+                                    <i class="fab fa-x-twitter text-3xl text-black dark:text-white mb-2"></i>
+                                    <span class="text-sm font-medium text-gray-900 dark:text-white">X (Twitter)</span>
                                     <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Not Connected</span>
                                 </button>
                                 
@@ -175,9 +175,9 @@
                                     <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Not Connected</span>
                                 </button>
                                 
-                                <button onclick="connectAccount('twitter')" class="connect-btn flex flex-col items-center p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 transition-colors" data-platform="twitter">
-                                    <i class="fab fa-twitter text-3xl text-blue-400 mb-2"></i>
-                                    <span class="text-sm font-medium text-gray-900 dark:text-white">Twitter</span>
+                                <button onclick="connectAccount('facebook')" class="connect-btn flex flex-col items-center p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-600 transition-colors" data-platform="facebook">
+                                    <i class="fab fa-facebook text-3xl text-blue-600 mb-2"></i>
+                                    <span class="text-sm font-medium text-gray-900 dark:text-white">Facebook</span>
                                     <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Not Connected</span>
                                 </button>
                             </div>
@@ -346,7 +346,7 @@
                                     </div>
                                     
                                     <!-- Action Items & Recommendations -->
-                                    <div class="mt-6">
+                                    <div id="analysis-recommendations-section" class="mt-6">
                                         <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Action Items & Recommendations</h4>
                                         <div class="space-y-4">
                                             <!-- High Priority Recommendation -->
@@ -498,6 +498,67 @@
                                 </div>
                             </div>
 
+                            <!-- Action Items & Recommendations -->
+                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Action Items & Recommendations</h3>
+                                </div>
+                                <div class="p-6">
+                                    <div class="space-y-4">
+                                        <!-- High Priority Recommendation -->
+                                        <div class="p-4 border border-red-200 dark:border-red-700 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                                            <div class="flex items-start space-x-3">
+                                                <div class="flex-shrink-0">
+                                                    <i class="fas fa-exclamation-circle text-red-600 mt-1"></i>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <h5 class="font-medium text-red-900 dark:text-red-100 mb-2">Remove political content</h5>
+                                                    <p class="text-sm text-red-700 dark:text-red-300 mb-2">Delete posts containing political opinions or activism references</p>
+                                                    <div class="flex items-center text-xs text-red-600 dark:text-red-400">
+                                                        <i class="fas fa-file-alt mr-1"></i>
+                                                        <span>Affects 2 posts</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Medium Priority Recommendation -->
+                                        <div class="p-4 border border-yellow-200 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                                            <div class="flex items-start space-x-3">
+                                                <div class="flex-shrink-0">
+                                                    <i class="fas fa-exclamation-triangle text-yellow-600 mt-1"></i>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <h5 class="font-medium text-yellow-900 dark:text-yellow-100 mb-2">Add context to social posts</h5>
+                                                    <p class="text-sm text-yellow-700 dark:text-yellow-300 mb-2">Provide background information for party or social gathering posts</p>
+                                                    <div class="flex items-center text-xs text-yellow-600 dark:text-yellow-400">
+                                                        <i class="fas fa-file-alt mr-1"></i>
+                                                        <span>Affects 3 posts</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Positive Recommendation -->
+                                        <div class="p-4 border border-green-200 dark:border-green-700 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                                            <div class="flex items-start space-x-3">
+                                                <div class="flex-shrink-0">
+                                                    <i class="fas fa-check-circle text-green-600 mt-1"></i>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <h5 class="font-medium text-green-900 dark:text-green-100 mb-2">Enhance educational content</h5>
+                                                    <p class="text-sm text-green-700 dark:text-green-300 mb-2">Continue sharing academic achievements and educational experiences</p>
+                                                    <div class="flex items-center text-xs text-green-600 dark:text-green-400">
+                                                        <i class="fas fa-thumbs-up mr-1"></i>
+                                                        <span>Keep showcasing academic progress</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Download Report -->
                             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
                                 <div class="p-6">
@@ -519,6 +580,98 @@
 
                 <!-- Results Section -->
                 <div id="results-section" class="section hidden">
+                    <!-- Current Analysis Results -->
+                    <div id="current-results" class="mb-6">
+                        <!-- No results message -->
+                        <div id="no-results-message" class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-8 text-center">
+                            <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-chart-line text-2xl text-gray-400"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Analysis Results Yet</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">Connect your social media accounts and run an analysis to see your visa risk assessment.</p>
+                            <button onclick="showSection('home')" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Go to Dashboard
+                            </button>
+                        </div>
+                        
+                        <!-- Results display -->
+                        <div id="results-display" class="hidden space-y-6">
+                            <!-- Overall Risk Summary -->
+                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Latest Analysis Results</h3>
+                                        <div class="flex items-center space-x-2">
+                                            <span id="analysis-date" class="text-sm text-gray-500 dark:text-gray-400"></span>
+                                            <button onclick="downloadReport()" class="px-3 py-1 bg-primary-600 text-white text-sm rounded hover:bg-primary-700 transition-colors">
+                                                <i class="fas fa-download mr-1"></i>
+                                                Download
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                        <div class="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                                            <div id="overall-risk-display" class="text-3xl font-bold text-green-600">Low</div>
+                                            <div class="text-sm text-gray-600 dark:text-gray-400">Overall Risk</div>
+                                        </div>
+                                        <div class="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                                            <div id="approval-chance-display" class="text-3xl font-bold text-blue-600">--</div>
+                                            <div class="text-sm text-gray-600 dark:text-gray-400">Approval Chance</div>
+                                        </div>
+                                        <div class="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                                            <div id="posts-analyzed-display" class="text-3xl font-bold text-purple-600">--</div>
+                                            <div class="text-sm text-gray-600 dark:text-gray-400">Posts Analyzed</div>
+                                        </div>
+                                        <div class="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                                            <div id="flagged-items-display" class="text-3xl font-bold text-yellow-600">--</div>
+                                            <div class="text-sm text-gray-600 dark:text-gray-400">Flagged Items</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Platform Breakdown -->
+                            <div id="platform-analysis-card" class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Platform Analysis</h3>
+                                </div>
+                                <div class="p-6">
+                                    <div id="platform-results" class="space-y-4">
+                                        <!-- Platform analysis will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Flagged Content -->
+                            <div id="flagged-content-card" class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Flagged Content Review</h3>
+                                </div>
+                                <div class="p-6">
+                                    <div id="flagged-content-results" class="space-y-4">
+                                        <!-- Flagged content will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Recommendations -->
+                            <div id="recommendations-card" class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Recommendations</h3>
+                                </div>
+                                <div class="p-6">
+                                    <div id="recommendations-results" class="space-y-4">
+                                        <!-- Recommendations will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Analysis History -->
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
                         <div class="p-6 border-b border-gray-200 dark:border-gray-700">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Analysis History</h3>
@@ -611,6 +764,55 @@
                 <div class="mt-4 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                     <div id="progress-bar" class="bg-primary-600 h-2 rounded-full transition-all duration-500 w-0"></div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Social Media Connection Modal -->
+    <div id="connection-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-1/2 transform -translate-y-1/2 mx-auto p-8 border w-96 shadow-lg rounded-lg bg-white dark:bg-gray-800">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i id="modal-platform-icon" class="text-3xl text-primary-600"></i>
+                </div>
+                <h3 id="modal-title" class="text-lg font-medium text-gray-900 dark:text-white mb-2">Connect to Platform</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">Enter your username to connect your account</p>
+                
+                <form id="connection-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="username-input">
+                            Username
+                        </label>
+                        <input 
+                            type="text" 
+                            id="username-input" 
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" 
+                            placeholder="Enter your username"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button 
+                            type="button" 
+                            onclick="closeConnectionModal()" 
+                            class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        >
+                            Cancel
+                        </button>
+                        <button 
+                            type="submit" 
+                            id="save-connection-btn"
+                            class="flex-1 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
+                        >
+                            <span id="save-btn-text">Save</span>
+                            <div id="save-btn-loading" class="hidden">
+                                <i class="fas fa-spinner fa-spin mr-2"></i>
+                                Connecting...
+                            </div>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

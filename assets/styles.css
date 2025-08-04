@@ -565,6 +565,15 @@ button:active {
     transition: stroke-dashoffset 1s ease-in-out;
 }
 
+/* Navigation styles */
+.nav-item {
+    @apply text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors;
+}
+
+.nav-item.active {
+    @apply bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300;
+}
+
 /* Platform connection animation */
 .connect-btn {
     transition: all 0.3s ease;
