@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - VisaGuardAI</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" href="assets/favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/styles.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
+    <!-- Navbar -->
+    <nav class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center">
+                        <img src="assets/logo.svg" alt="VisaGuardAI Logo" class="h-10 w-auto">
+                    </a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-moon dark:hidden text-gray-600"></i>
+                        <i class="fas fa-sun hidden dark:block text-gray-300"></i>
+                    </button>
+                    
+                    <a href="dashboard.html" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Unlock Full Analysis</h1>
+                <p class="mt-2 text-lg text-gray-600 dark:text-gray-400">Get complete visa risk assessment and detailed recommendations</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Order Summary -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-shield-alt text-primary-600"></i>
+                            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">What You'll Get</h2>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-6">
+                            <!-- What's Included -->
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </div>
+                                    <span class="text-gray-900 dark:text-white font-medium">Complete social media risk analysis</span>
+                                </div>
+                                
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </div>
+                                    <span class="text-gray-900 dark:text-white font-medium">All flagged content revealed</span>
+                                </div>
+                                
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </div>
+                                    <span class="text-gray-900 dark:text-white font-medium">Detailed explanations and context</span>
+                                </div>
+                                
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </div>
+                                    <span class="text-gray-900 dark:text-white font-medium">Specific improvement recommendations</span>
+                                </div>
+                                
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </div>
+                                    <span class="text-gray-900 dark:text-white font-medium">Professional PDF report download</span>
+                                </div>
+                                
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </div>
+                                    <span class="text-gray-900 dark:text-white font-medium">Multi-platform comprehensive scan</span>
+                                </div>
+                            </div>
+                            
+                            <hr class="border-gray-200 dark:border-gray-700">
+                            
+                            <!-- Pricing Breakdown -->
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-600 dark:text-gray-400">Full Risk Report</span>
+                                    <span class="font-semibold text-gray-900 dark:text-white">$15.00</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-600 dark:text-gray-400">Processing Fee</span>
+                                    <span class="font-semibold text-gray-900 dark:text-white">$0.00</span>
+                                </div>
+                            </div>
+                            
+                            <hr class="border-gray-200 dark:border-gray-700">
+                            
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-gray-900 dark:text-white">Total</span>
+                                <span class="text-2xl font-bold text-primary-600">$15.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Form -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Payment Information</h2>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Your payment is secure and encrypted</p>
+                    </div>
+                    <div class="p-6">
+                        <form id="payment-form" onsubmit="processPayment(event)" class="space-y-6">
+                            <!-- Payment Method -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Payment Method</label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label class="relative">
+                                        <input type="radio" name="payment-method" value="card" checked class="sr-only">
+                                        <div class="payment-method-option border-2 border-primary-600 bg-primary-50 dark:bg-primary-900/20 rounded-lg p-3 cursor-pointer transition-colors">
+                                            <div class="flex items-center justify-center">
+                                                <i class="fas fa-credit-card text-primary-600 mr-2"></i>
+                                                <span class="text-sm font-medium text-primary-900 dark:text-primary-100">Credit Card</span>
+                                            </div>
+                                        </div>
+                                    </label>
+                                    <label class="relative">
+                                        <input type="radio" name="payment-method" value="paypal" class="sr-only">
+                                        <div class="payment-method-option border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 rounded-lg p-3 cursor-pointer transition-colors">
+                                            <div class="flex items-center justify-center">
+                                                <i class="fab fa-paypal text-blue-600 mr-2"></i>
+                                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">PayPal</span>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Card Details -->
+                            <div id="card-details">
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="card-number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Card Number</label>
+                                        <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19"
+                                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                               required>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="expiry-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Expiry Date</label>
+                                            <input type="text" id="expiry-date" placeholder="MM/YY" maxlength="5"
+                                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                                   required>
+                                        </div>
+                                        <div>
+                                            <label for="cvv" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">CVV</label>
+                                            <input type="text" id="cvv" placeholder="123" maxlength="4"
+                                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                                   required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="cardholder-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cardholder Name</label>
+                                        <input type="text" id="cardholder-name" placeholder="John Doe"
+                                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                               required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Billing Address -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Billing Address</label>
+                                <div class="space-y-4">
+                                    <input type="text" placeholder="Street Address" 
+                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                           required>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <input type="text" placeholder="City" 
+                                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                               required>
+                                        <input type="text" placeholder="ZIP Code" 
+                                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                               required>
+                                    </div>
+                                    <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" required>
+                                        <option value="">Select Country</option>
+                                        <option value="US">United States</option>
+                                        <option value="CA">Canada</option>
+                                        <option value="UK">United Kingdom</option>
+                                        <option value="AU">Australia</option>
+                                        <option value="DE">Germany</option>
+                                        <option value="FR">France</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Terms and Conditions -->
+                            <div class="flex items-start">
+                                <input id="terms" type="checkbox" required
+                                       class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-600 rounded mt-1">
+                                <label for="terms" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+                                    I agree to the <a href="#" class="text-primary-600 hover:text-primary-500">Terms of Service</a> and <a href="#" class="text-primary-600 hover:text-primary-500">Privacy Policy</a>
+                                </label>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" id="pay-button"
+                                    class="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 px-4 rounded-lg font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+                                <span id="pay-text">Complete Payment - $15.00</span>
+                                <span id="pay-loading" class="hidden">
+                                    <i class="fas fa-spinner fa-spin mr-2"></i>
+                                    Processing...
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="mt-12 text-center">
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Your payment is secure and protected</p>
+                <div class="flex items-center justify-center space-x-8 opacity-60">
+                    <div class="flex items-center space-x-2">
+                        <i class="fab fa-cc-stripe text-2xl text-blue-600"></i>
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Stripe</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fab fa-apple-pay text-2xl text-gray-900 dark:text-white"></i>
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Apple Pay</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fab fa-google-pay text-2xl text-blue-500"></i>
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Google Pay</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-shield-alt text-2xl text-green-600"></i>
+                        <span class="text-sm text-gray-600 dark:text-gray-400">SSL Secure</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Money Back Guarantee -->
+            <div class="mt-8 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg p-6 text-center">
+                <div class="flex items-center justify-center mb-2">
+                    <i class="fas fa-shield-alt text-green-600 text-2xl mr-2"></i>
+                    <h3 class="text-lg font-semibold text-green-800 dark:text-green-200">30-Day Money Back Guarantee</h3>
+                </div>
+                <p class="text-green-700 dark:text-green-300">Not satisfied with your analysis? Get a full refund within 30 days, no questions asked.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-1/2 transform -translate-y-1/2 mx-auto p-8 border w-96 shadow-lg rounded-lg bg-white dark:bg-gray-800">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check text-green-600 text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Payment Successful!</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                    Your payment has been processed successfully. You now have access to the complete analysis.
+                </p>
+                <button onclick="redirectToDashboard()" class="w-full bg-primary-600 hover:bg-primary-700 text-white py-2 px-4 rounded-lg transition-colors">
+                    Go to Dashboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Container -->
+    <div id="message-container" class="fixed top-4 right-4 z-50 max-w-sm w-full"></div>
+
+    <script src="assets/theme.js"></script>
+    <script>
+        // Format card number input
+        document.getElementById('card-number').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '');
+            let formattedValue = value.replace(/(.{4})/g, '$1 ').trim();
+            if (formattedValue.length > 19) formattedValue = formattedValue.substr(0, 19);
+            this.value = formattedValue;
+        });
+
+        // Format expiry date input
+        document.getElementById('expiry-date').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            this.value = value;
+        });
+
+        // Format CVV input
+        document.getElementById('cvv').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
+        // Payment method selection
+        document.querySelectorAll('input[name="payment-method"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.payment-method-option').forEach(option => {
+                    option.className = "payment-method-option border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 rounded-lg p-3 cursor-pointer transition-colors";
+                });
+                
+                if (this.checked) {
+                    this.parentElement.querySelector('.payment-method-option').className = "payment-method-option border-2 border-primary-600 bg-primary-50 dark:bg-primary-900/20 rounded-lg p-3 cursor-pointer transition-colors";
+                }
+
+                const cardDetails = document.getElementById('card-details');
+                if (this.value === 'card') {
+                    cardDetails.style.display = 'block';
+                } else {
+                    cardDetails.style.display = 'none';
+                }
+            });
+        });
+
+        function processPayment(event) {
+            event.preventDefault();
+            
+            const payButton = document.getElementById('pay-button');
+            const payText = document.getElementById('pay-text');
+            const payLoading = document.getElementById('pay-loading');
+            
+            // Show loading state
+            payButton.disabled = true;
+            payText.classList.add('hidden');
+            payLoading.classList.remove('hidden');
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                // Mark user as paid
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const currentUserEmail = localStorage.getItem('currentUser');
+                
+                const userIndex = users.findIndex(user => user.email === currentUserEmail);
+                if (userIndex !== -1) {
+                    users[userIndex].isPaid = true;
+                    localStorage.setItem('users', JSON.stringify(users));
+                }
+                
+                // Update current user session
+                localStorage.setItem('userPaidStatus', 'true');
+                
+                // Show success modal
+                document.getElementById('success-modal').classList.remove('hidden');
+            }, 2000);
+        }
+
+        function redirectToDashboard() {
+            window.location.href = 'dashboard.html';
+        }
+
+        function showMessage(message, type = 'info') {
+            const container = document.getElementById('message-container');
+            const messageDiv = document.createElement('div');
+            
+            const colors = {
+                success: 'bg-green-100 border-green-400 text-green-700',
+                error: 'bg-red-100 border-red-400 text-red-700',
+                info: 'bg-blue-100 border-blue-400 text-blue-700'
+            };
+            
+            messageDiv.className = `${colors[type]} border px-4 py-3 rounded mb-4 shadow-lg`;
+            messageDiv.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-2">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            container.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                if (messageDiv.parentElement) {
+                    messageDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // Check if user is logged in
+        window.addEventListener('load', function() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+</html>

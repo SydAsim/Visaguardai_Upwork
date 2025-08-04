@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - VisaGuardAI</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" href="assets/favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/styles.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
+    <!-- Navbar -->
+    <nav class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center">
+                        <img src="assets/logo.svg" alt="VisaGuardAI Logo" class="h-10 w-auto">
+                    </a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-moon dark:hidden text-gray-600"></i>
+                        <i class="fas fa-sun hidden dark:block text-gray-300"></i>
+                    </button>
+                    
+                    <a href="index.html" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Welcome Back</h2>
+                <p class="mt-2 text-gray-600 dark:text-gray-400">Sign in to your account or create a new one</p>
+            </div>
+            
+            <!-- Tab Navigation -->
+            <div class="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+                <button id="login-tab" class="flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-sm">
+                    Login
+                </button>
+                <button id="signup-tab" class="flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+                    Sign Up
+                </button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" class="space-y-6">
+                <form class="space-y-6" onsubmit="handleLogin(event)">
+                    <div>
+                        <label for="login-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email address</label>
+                        <input id="login-email" name="email" type="email" required 
+                               class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white bg-white dark:bg-gray-800 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-colors"
+                               placeholder="Enter your email">
+                    </div>
+                    
+                    <div>
+                        <label for="login-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+                        <input id="login-password" name="password" type="password" required 
+                               class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white bg-white dark:bg-gray-800 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-colors"
+                               placeholder="Enter your password">
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input id="remember-me" name="remember-me" type="checkbox" 
+                                   class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-600 rounded">
+                            <label for="remember-me" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+                                Remember me
+                            </label>
+                        </div>
+
+                        <div class="text-sm">
+                            <button type="button" onclick="showForgotPassword()" class="font-medium text-primary-600 hover:text-primary-500 transition-colors">
+                                Forgot your password?
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="submit" 
+                                class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
+                            Sign in
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signup-form" class="space-y-6 hidden">
+                <form class="space-y-6" onsubmit="handleSignup(event)">
+                    <div>
+                        <label for="signup-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email address</label>
+                        <input id="signup-email" name="email" type="email" required 
+                               class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white bg-white dark:bg-gray-800 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-colors"
+                               placeholder="Enter your email">
+                    </div>
+                    
+                    <div>
+                        <label for="signup-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+                        <input id="signup-password" name="password" type="password" required minlength="8"
+                               class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white bg-white dark:bg-gray-800 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-colors"
+                               placeholder="Create a password (min 8 characters)">
+                    </div>
+                    
+                    <div>
+                        <label for="confirm-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Confirm Password</label>
+                        <input id="confirm-password" name="confirmPassword" type="password" required 
+                               class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white bg-white dark:bg-gray-800 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-colors"
+                               placeholder="Confirm your password">
+                    </div>
+
+                    <div class="flex items-center">
+                        <input id="terms" name="terms" type="checkbox" required
+                               class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-600 rounded">
+                        <label for="terms" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+                            I agree to the <a href="#" class="text-primary-600 hover:text-primary-500">Terms of Service</a> and <a href="#" class="text-primary-600 hover:text-primary-500">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <div>
+                        <button type="submit" 
+                                class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
+                            Create Account
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Social Login -->
+            <div class="mt-6">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-gray-50 dark:bg-gray-900 text-gray-500 dark:text-gray-400">Or continue with</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 grid grid-cols-2 gap-3">
+                    <button onclick="socialLogin('google')" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fab fa-google text-red-500"></i>
+                        <span class="ml-2">Google</span>
+                    </button>
+
+                    <button onclick="socialLogin('linkedin')" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fab fa-linkedin text-blue-600"></i>
+                        <span class="ml-2">LinkedIn</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgot-password-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">Reset Password</h3>
+                    <button onclick="closeForgotPassword()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                    Enter your email address and we'll send you a link to reset your password.
+                </p>
+                
+                <form onsubmit="handleForgotPassword(event)">
+                    <div class="mb-4">
+                        <input type="email" id="forgot-email" required
+                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                               placeholder="Enter your email">
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <button type="button" onclick="closeForgotPassword()"
+                                class="flex-1 px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                class="flex-1 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors">
+                            Send Reset Link
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error/Success Messages -->
+    <div id="message-container" class="fixed top-4 right-4 z-50 max-w-sm w-full"></div>
+
+    <script src="assets/theme.js"></script>
+    <script src="assets/auth.js"></script>
+    <script>
+        // Tab switching functionality
+        document.getElementById('login-tab').addEventListener('click', function() {
+            switchTab('login');
+        });
+
+        document.getElementById('signup-tab').addEventListener('click', function() {
+            switchTab('signup');
+        });
+
+        function switchTab(tab) {
+            const loginTab = document.getElementById('login-tab');
+            const signupTab = document.getElementById('signup-tab');
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+
+            if (tab === 'login') {
+                loginTab.className = "flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-sm";
+                signupTab.className = "flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300";
+                loginForm.classList.remove('hidden');
+                signupForm.classList.add('hidden');
+            } else {
+                signupTab.className = "flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-sm";
+                loginTab.className = "flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300";
+                signupForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+            }
+        }
+
+        function showForgotPassword() {
+            document.getElementById('forgot-password-modal').classList.remove('hidden');
+        }
+
+        function closeForgotPassword() {
+            document.getElementById('forgot-password-modal').classList.add('hidden');
+        }
+
+        function handleForgotPassword(event) {
+            event.preventDefault();
+            const email = document.getElementById('forgot-email').value;
+            
+            // Simulate sending reset email
+            showMessage('Password reset link sent to ' + email, 'success');
+            closeForgotPassword();
+        }
+
+        function socialLogin(provider) {
+            showMessage(`${provider.charAt(0).toUpperCase() + provider.slice(1)} login coming soon!`, 'info');
+        }
+
+        // Check if user is already logged in
+        window.addEventListener('load', function() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>
